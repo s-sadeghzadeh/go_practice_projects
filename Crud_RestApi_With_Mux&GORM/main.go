@@ -46,4 +46,7 @@ func RegisterProductRoutes(router *mux.Router) {
 	router.HandleFunc("/api/contacts/{id}", controllers.GetContactByIDs).Methods("GET")
 	router.HandleFunc("/api/contacts/{id}", controllers.UpdateContact).Methods("PUT")
 	router.HandleFunc("/api/contacts/{id}", controllers.DeleteContact).Methods("DELETE")
+
+	router.HandleFunc("/", controllers.HomePage)
+
 }

@@ -7,10 +7,19 @@ import (
 	"prj_crud/entities"
 	"strconv"
 	"strings"
+	"fmt"
 
 	//"gorm.io/gorm"
 	"github.com/gorilla/mux"
 )
+
+
+/////////////////////////////////////////////////////////////////////////////
+func HomePage(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintf(w,"welcome to home page")
+}
+
+
 
 // ////////////////////////////////////////////////////////////////////////////////
 func AddContact(w http.ResponseWriter, r *http.Request) {
