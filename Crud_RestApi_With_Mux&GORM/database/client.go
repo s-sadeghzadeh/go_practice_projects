@@ -2,7 +2,7 @@ package database
 
 import (
 	"log"
-	"prj_crud/entities"
+	"Crud_RestApi_With_Mux_GORM/entities"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -18,16 +18,21 @@ func Connect(connectionString string) {
 		log.Fatal(err)
 		panic("Cannot connect to DB")
 	}
-	//Instance.Set("gorm:auto_preload", true)
+	
 	log.Println("Connected to Database...")
 }
 
 func Migrate() {
 	//Instance.AutoMigrate(&entities.Contact{}, &entities.Company{})
-	err = Instance.AutoMigrate(&entities.Contact{}, &entities.Company{})
+	err = Instance.AutoMigrate(&entities.Contact{}, &entities.Company{}, &entities.User{})
 	if err != nil {
 		log.Println("migration failure")
 		return
 	}
 	log.Println("Database Migration Completed...")
+}
+
+func CloseDatabase() {
+	db, _ := Instance.DB()
+	db.Close()
 }
