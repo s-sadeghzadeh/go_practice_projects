@@ -4,6 +4,10 @@ import (
 	"gorm.io/gorm"
 )
 
+
+
+//////////////////////////////////////////////////
+
 type Contact struct {
 	gorm.Model
 	//ID           string  `json:"id"`
@@ -48,3 +52,5 @@ type Error struct {
 	IsError bool   `json:"isError"`
 	Message string `json:"message"`
 }
+
+

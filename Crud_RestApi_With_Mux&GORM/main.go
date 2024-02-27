@@ -10,12 +10,17 @@ import (
 
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
-	//"gorm.io/gorm"
 )
 
 var (
 	router *mux.Router
 	//secretkey string = "secretkeyjwt"
+)
+
+const (
+	admin  = "admin"
+	user   = "user"
+	writer = "writer"
 )
 
 func main() {
@@ -54,27 +59,27 @@ func CreateRouter() {
 func InitializeRoute() {
 
 	//router.HandleFunc("/", controllers.HomePage)
-
-	router.HandleFunc("/signup", controllers.SignUp).Methods("POST")
-	router.HandleFunc("/signin", controllers.SignIn).Methods("POST")
-	router.HandleFunc("/admin", controllers.IsAuthorized(controllers.AdminIndex)).Methods("GET")
-	router.HandleFunc("/user", controllers.IsAuthorized(controllers.UserIndex)).Methods("GET")
-	router.HandleFunc("/", controllers.Index).Methods("GET")
-	
-
 	router.Methods("OPTIONS").HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Access-Control-Allow-Origin", "")
 		w.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
 		w.Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization, Access-Control-Request-Headers, Access-Control-Request-Method, Connection, Host, Origin, User-Agent, Referer, Cache-Control, X-header")
 	})
 
-	//func routerForAdmins()
+	//Public Api Without role And Auth
+	router.HandleFunc("/signup", controllers.SignUp).Methods("POST")
+	router.HandleFunc("/signin", controllers.SignIn).Methods("POST")
+	router.HandleFunc("/", controllers.Index).Methods("GET")
 
-	router.HandleFunc("/api/contacts", controllers.AddContact).Methods("POST")
-	router.HandleFunc("/api/contacts", controllers.IsAuthorized(controllers.GetContacts)).Methods("GET")
-	router.HandleFunc("/api/contacts/{id}", controllers.GetContactByIDs).Methods("GET")
-	router.HandleFunc("/api/contacts/{id}", controllers.UpdateContact).Methods("PUT")
-	router.HandleFunc("/api/contacts/{id}", controllers.DeleteContact).Methods("DELETE")
+	//RoleBase Api
+	router.HandleFunc("/admin", controllers.IsAuthorized([]string{admin}, controllers.AdminIndex)).Methods("GET")
+	router.HandleFunc("/user", controllers.IsAuthorized([]string{user}, controllers.UserIndex)).Methods("GET")
+
+	//Public Api With Just Auth
+	router.HandleFunc("/api/contacts", controllers.IsAuthorized([]string{}, controllers.AddContact)).Methods("POST")
+	router.HandleFunc("/api/contacts", controllers.IsAuthorized([]string{}, controllers.GetContacts)).Methods("GET")
+	router.HandleFunc("/api/contacts/{id}", controllers.IsAuthorized([]string{}, controllers.GetContactByIDs)).Methods("GET")
+	router.HandleFunc("/api/contacts/{id}", controllers.IsAuthorized([]string{}, controllers.UpdateContact)).Methods("PUT")
+	router.HandleFunc("/api/contacts/{id}", controllers.IsAuthorized([]string{}, controllers.DeleteContact)).Methods("DELETE")
 
 }
 

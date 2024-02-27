@@ -60,7 +60,7 @@ func GenerateJWT(email, role string) (string, error) {
 //---------------------MIDDLEWARE FUNCTION-----------------------
 
 // check whether user is authorized or not
-func IsAuthorized(handler http.HandlerFunc) http.HandlerFunc {
+func IsAuthorized(roleArray []string, handler http.HandlerFunc) http.HandlerFunc {
 	fmt.Println("calling IsAuthorized")
 
 	return func(w http.ResponseWriter, r *http.Request) {
@@ -88,21 +88,43 @@ func IsAuthorized(handler http.HandlerFunc) http.HandlerFunc {
 			return
 		}
 
-		if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
-			if claims["role"] == "admin" {
-				r.Header.Set("Role", "admin")
-				handler.ServeHTTP(w, r)
-				return
-
-			} else if claims["role"] == "user" {
-				r.Header.Set("Role", "user")
-				handler.ServeHTTP(w, r)
-				return
-
-			}
+		// آگر آرایه ورودی خالی باشد یعنی نیازی به بررسی رول کاربر نمی باشد و فقط اعبار توکن مهم است
+		if len(roleArray) == 0 && token.Valid {
+			fmt.Println("input role is empty")
+			handler.ServeHTTP(w, r)
+			return
 		}
+
+		if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
+			// if claims["role"] == "admin" {
+			// 	r.Header.Set("Role", "admin")
+			// 	handler.ServeHTTP(w, r)
+			// 	return
+
+			// } else if claims["role"] == "user" {
+			// 	r.Header.Set("Role", "user")
+			// 	handler.ServeHTTP(w, r)
+			// 	return
+
+			// }
+			for _, role := range roleArray {
+				if claims["role"] == role {
+					fmt.Println("claims[role] == role")
+					handler.ServeHTTP(w, r)
+					return
+				}
+			}
+
+		}
+
+
+		fmt.Println("role no access")
+
 		var reserr entities.Error
 		reserr = SetError(reserr, "Not Authorized.")
-		json.NewEncoder(w).Encode(err)
+		json.NewEncoder(w).Encode(reserr)
+
+
+
 	}
 }

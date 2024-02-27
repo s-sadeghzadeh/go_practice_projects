@@ -123,10 +123,10 @@ func SignIn(w http.ResponseWriter, r *http.Request) {
 // //////////////////////////////////////////////////////
 func AdminIndex(w http.ResponseWriter, r *http.Request) {
 
-	if r.Header.Get("Role") != "admin" {
-		w.Write([]byte("Not authorized."))
-		return
-	}
+	// if r.Header.Get("Role") != "admin" {
+	// 	w.Write([]byte("Not authorized."))
+	// 	return
+	// }
 	w.Write([]byte("Welcome, Admin."))
 }
 
@@ -146,10 +146,10 @@ func UserIndex(w http.ResponseWriter, r *http.Request) {
 // ////////////////////////////////////////////////////////////////////////////////
 func AddContact(w http.ResponseWriter, r *http.Request) {
 
-	if r.Header.Get("Role") != "admin" {
-		w.Write([]byte("Not authorized."))
-		return
-	}
+	// if r.Header.Get("Role") != "admin" {
+	// 	w.Write([]byte("Not authorized."))
+	// 	return
+	// }
 
 	w.Header().Set("Content-Type", "application/json")
 	var contact entities.Contact
@@ -161,10 +161,10 @@ func AddContact(w http.ResponseWriter, r *http.Request) {
 // ////////////////////////////////////////////////////////////////////////////////
 func GetContactByIDs(w http.ResponseWriter, r *http.Request) {
 
-	if r.Header.Get("Role") != "admin" {
-		w.Write([]byte("Not authorized."))
-		return
-	}
+	// if r.Header.Get("Role") != "admin" {
+	// 	w.Write([]byte("Not authorized."))
+	// 	return
+	// }
 
 	contactId := mux.Vars(r)["id"]
 
@@ -191,10 +191,10 @@ func GetContactByIDs(w http.ResponseWriter, r *http.Request) {
 // ////////////////////////////////////////////////////////////////////////////////
 func GetContacts(w http.ResponseWriter, r *http.Request) {
 
-	if r.Header.Get("Role") != "admin" {
-		w.Write([]byte("Not authorized."))
-		return
-	}
+	// if r.Header.Get("Role") != "admin" {
+	// 	w.Write([]byte("Not authorized."))
+	// 	return
+	// }
 
 	var contacts []entities.Contact
 	// database.Instance.Find(&contacts)
@@ -207,10 +207,10 @@ func GetContacts(w http.ResponseWriter, r *http.Request) {
 // ////////////////////////////////////////////////////////////////////////////////
 func UpdateContact(w http.ResponseWriter, r *http.Request) {
 
-	if r.Header.Get("Role") != "admin" {
-		w.Write([]byte("Not authorized."))
-		return
-	}
+	// if r.Header.Get("Role") != "admin" {
+	// 	w.Write([]byte("Not authorized."))
+	// 	return
+	// }
 
 	contactId := mux.Vars(r)["id"]
 	if checkIfContactExists(contactId) == false {
@@ -228,10 +228,10 @@ func UpdateContact(w http.ResponseWriter, r *http.Request) {
 // ////////////////////////////////////////////////////////////////////////////////
 func DeleteContact(w http.ResponseWriter, r *http.Request) {
 
-	if r.Header.Get("Role") != "admin" {
-		w.Write([]byte("Not authorized."))
-		return
-	}
+	// if r.Header.Get("Role") != "admin" {
+	// 	w.Write([]byte("Not authorized."))
+	// 	return
+	// }
 
 	w.Header().Set("Content-Type", "application/json")
 	contactId := mux.Vars(r)["id"]
